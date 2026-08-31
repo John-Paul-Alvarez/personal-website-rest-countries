@@ -75,6 +75,10 @@ function validatePhone() {
     var phoneValue = phoneInput.value.trim();
     var phonePattern = /^\d{3}-\d{3}-\d{4}$/;
 
+    if (phoneValue.length === 0) {
+        return true;
+    }
+
     if (!phonePattern.test(phoneValue)) {
         errors.innerHTML = "<p>Please enter a phone number in the format 999-999-9999.</p>";
         phoneInput.focus();

@@ -50,8 +50,21 @@ function normalizeLocalCountry(country) {
     };
 }
 
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 function renderCountries(countries) {
     const countriesTable = document.getElementById("countriesTable");
+
+    if (!countriesTable) {
+        return;
+    }
 
     if (!Array.isArray(countries) || countries.length === 0) {
         countriesTable.innerHTML = '<p class="table-message">Country data is unavailable right now.</p>';
@@ -59,17 +72,20 @@ function renderCountries(countries) {
     }
 
     const countriesRows = countries.map(function (country, index) {
+        const nativeName = escapeHtml(country.nativeName);
+        const capital = escapeHtml(country.capital);
+        const region = escapeHtml(country.region);
         const flagMarkup = country.flag
-            ? `<img src="${country.flag}" alt="${country.nativeName} Flag" width="32" height="32">`
+            ? `<img src="${escapeHtml(country.flag)}" alt="${nativeName} Flag" width="32" height="32" loading="lazy">`
             : "N/A";
 
         return `
             <tr>
                 <td>${index + 1}</td>
                 <td>${flagMarkup}</td>
-                <td>${country.nativeName}</td>
-                <td>${country.capital}</td>
-                <td>${country.region}</td>
+                <td>${nativeName}</td>
+                <td>${capital}</td>
+                <td>${region}</td>
             </tr>`;
     }).join("");
 
